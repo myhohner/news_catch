@@ -12,13 +12,12 @@ from selenium.webdriver.chrome.options import Options
 
 
 class Campaign:
-    def setUp(self):
+    def setUp(self,startTime):
         driver_path=excel.app_path()+'\chromedriver.exe'
         #driver_path=os.path.dirname(__file__)+'\chromedriver.exe'
-        startTime=input('请输入日期:')
         chrome_options=Options()
         chrome_options.add_argument('--headless')
-        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver = webdriver.Chrome(driver_path,options=chrome_options)
         self.driver.implicitly_wait(30)
         base_url = "http://tobaccofreekids.meihua.info/v2/Login2.aspx?ReturnUrl=%2fAdmin%2fnewsdata.aspx"
         self.verificationErrors = []
@@ -44,7 +43,7 @@ class Campaign:
         
         driver.find_element_by_xpath("//input[contains(@id,'cbx_publicTime')]").click()
 
-        #startTime = "2020-04-15 13:32"
+        #startTime = "2020-04-16 13:32"
         driver.find_element_by_id('sTime').clear()
         driver.find_element_by_id('sTime').send_keys(startTime)
         driver.find_element_by_xpath("//a[@v='1' and contains(text(),'标题')]").click()
