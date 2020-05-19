@@ -1,7 +1,9 @@
 import tkinter as tk
 from selenium_test import Campaign
 from tkinter import ttk
+import time
 import excel,resolve,os,threading,datetime
+import re
 window = tk.Tk()
 window.title('my window')
 window.geometry('400x300')
@@ -19,12 +21,35 @@ entry_var=tk.StringVar(value=datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
 def hit_me():
     pb.start()
     var.set('请稍等...')
+    
+    
     startTime = e.get()
     a=Campaign()
-    a.setUp(startTime)
-    html=a.crawl()
-    result_list=resolve.resolve(html)
-    excel.insert(result_list)
+    a.setUp()
+    a.select_all(startTime)
+    a.select_title()
+    html1=a.crawl()
+    result_list1=resolve.resolve(html1)
+    title_one='single'
+    excel.insert(result_list1,title_one)
+    time.sleep(3)
+    
+    a.select_all(startTime)
+    html2=a.crawl()
+    result_list2=resolve.resolve(html2)
+
+    bowl=[]
+    x=''.join('%s'%a[2] for a in result_list1)
+    for b in result_list2:
+        if re.search(b[2][:10],x):
+            bowl.append(b)
+    
+    for i in bowl:
+        result_list2.remove(i)
+
+    title_two='all'
+    excel.insert(result_list2,title_two)
+    
     a.tearDown()
     var.set('')
     var.set('Finish')
