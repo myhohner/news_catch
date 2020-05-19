@@ -5,7 +5,7 @@ def app_path():
         return os.path.dirname(sys.executable)
     return os.path.dirname(__file__)
 
-def insert(result_list):
+def insert(result_list,title):
     wb=openpyxl.Workbook()
     ws=wb.active
 
@@ -15,5 +15,5 @@ def insert(result_list):
     ws['D1']='数量'
     for result in result_list:
         ws.append(result)
-    path=app_path()+'\excel.xlsx'
+    path=app_path()+'\\'+title+'.xlsx'
     wb.save(path)

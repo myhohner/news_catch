@@ -12,18 +12,19 @@ from selenium.webdriver.chrome.options import Options
 
 
 class Campaign:
-    def setUp(self,startTime):
+    def setUp(self):
         driver_path=excel.app_path()+'\chromedriver.exe'
         #driver_path=os.path.dirname(__file__)+'\chromedriver.exe'
         chrome_options=Options()
         chrome_options.add_argument('--headless')
         self.driver = webdriver.Chrome(driver_path,options=chrome_options)
         self.driver.implicitly_wait(30)
-        base_url = "http://tobaccofreekids.meihua.info/v2/Login2.aspx?ReturnUrl=%2fAdmin%2fnewsdata.aspx"
         self.verificationErrors = []
         self.accept_next_alert = True
 
+    def select_all(self,startTime):
         driver = self.driver
+        base_url = "http://tobaccofreekids.meihua.info/v2/Login2.aspx?ReturnUrl=%2fAdmin%2fnewsdata.aspx"
         driver.get(base_url)
         driver.find_element_by_id("ctl00_cphContent_Login1_UserName").click()
         driver.find_element_by_id("ctl00_cphContent_Login1_UserName").clear()
@@ -46,7 +47,10 @@ class Campaign:
         #startTime = "2020-04-16 13:32"
         driver.find_element_by_id('sTime').clear()
         driver.find_element_by_id('sTime').send_keys(startTime)
-        driver.find_element_by_xpath("//a[@v='1' and contains(text(),'标题')]").click()
+
+    def select_title(self):
+        self.driver.find_element_by_xpath("//a[@v='1' and contains(text(),'标题')]").click()
+
 
     def crawl(self):
         elements_1=self.driver.find_elements_by_xpath("//span[contains(@class,'NewspaperStart')]")
@@ -88,12 +92,13 @@ class Campaign:
         print('finish')
         self.driver.quit()
 
-
+'''
 if __name__ == "__main__":
     a=Campaign()
     a.setUp()
+    a.select_title()
     html=a.crawl()
     result_list=resolve.resolve(html)
     excel.insert(result_list)
     a.tearDown()
-
+'''
